@@ -1,0 +1,77 @@
+<style>
+        li {
+        list-style: none;
+        }
+        </style>
+        
+        
+        <body>
+        <p align="center">
+        <font color="pink" size="8">测试题</font>
+        </p>
+        
+        
+        <form action="javascript:;">
+        <ul>
+        <li>请选择下列选项：******************</br>
+        <label><input type="radio" name="ques1" value="A1">非常</label>
+        <label><input type="radio" name="ques1" value="B2">还好</label>
+        <label><input type="radio" name="ques1" value="C3">厌倦</label>
+        </br></li>
+        <li>请选择下列选项：******************</br>
+        <label><input type="radio" name="ques2" value="A1">非常</label>
+        <label><input type="radio" name="ques2" value="B2">还好</label>
+        <label><input type="radio" name="ques2" value="C3">厌倦</label>
+        </br></li>
+        <li>请选择下列选项：******************</br>
+        <label><input type="radio" name="ques3" value="A1">非常</label>
+        <label><input type="radio" name="ques3" value="B2">还好</label>
+        <label><input type="radio" name="ques3" value="C3">厌倦</label>
+        </br></li>
+        <li>请选择下列选项：******************</br>
+        <label><input type="radio" name="ques4" value="A1">非常</label>
+        <label><input type="radio" name="ques4" value="B2">还好</label>
+        <label><input type="radio" name="ques4" value="C3">厌倦</label>
+        </br></li>
+        <li>请选择下列选项：******************</br>
+        <label><input type="radio" name="ques5" value="A1">非常</label>
+        <label><input type="radio" name="ques5" value="B2">还好</label>
+        <label><input type="radio" name="ques5" value="C3">厌倦</label>
+        </br></li>
+        </ul>
+        <button type="submit">提交</button>
+        </form>
+        <hr align="center" width="100%" size="8" color="red">
+        
+        
+        </body>
+        <script type="text/javascript">
+        window.onload = function () {
+        var lis = document.querySelectorAll('li');
+        var form = document.querySelector('form');
+        
+        
+        form.addEventListener('submit', function () {
+        var formData = new FormData(form);
+        var data = [];
+        for (let i = 1; i <= 5; i++) {
+        if (!formData.get('ques' + i)) {
+        alert('请完成第' + i + '道题!')
+        return
+        }
+        data.push(formData.get('ques' + i))
+        }
+        console.log(data);
+        var ans = [];
+        var sco = 0;
+        for (let i = 0; i < data.length; i++) {
+        
+        ans.push(data[i].substr(0, 1));
+        
+        sco = data[i].substr(1) - 0 + sco
+        }
+        alert(`您的答案是` + ans.join('-') + `,
+        您的分数是` + sco + `分`)
+        })
+        }
+        </script>

@@ -24,22 +24,22 @@ module.exports = async (req, res) => {
 		// 存储结果数组
 		const result = [];
 		// 验证
-		for (const item of ids) {
+		for (let item of ids) {
 			// 验证
-			let { error } = Joi.validate(item, schema);
+			let { error } =await Joi.validate(item, schema);
 			// 数据格式没有通过验证
 			if (error) return res.status(400).send({message: error.message});
 		}
-		// 通过验证
-		for (const item of ids) {
+		// 通过验证	
+		for (let item of ids) {
 			// 删除用户
 			let user = await User.findByIdAndDelete(item);
 			// 将删除的用户存储在数组中
 			result.push(user);
 			// 如果缩略图存在
-			if (user.avatar) {
+			if (user&&user.avatar) {
 				// 删除缩略图
-				await unlink(path.join(__dirname, '../', '../', 'public', 'uploads', user.avatar));
+				await unlink(path.join(__dirname, '../', '../','../', 'public', user.avatar));
 			}
 		}
 		// 响应
@@ -55,7 +55,7 @@ module.exports = async (req, res) => {
 		// 删除用户
 		let user = await User.findByIdAndDelete(id);
 		// 如果缩略图存在
-		if (user.avatar) {
+		if (user&&user.avatar) {
 			// 删除缩略图
 			await unlink(path.join(__dirname, '../', '../', '../', 'public', user.avatar));
 		}

@@ -19,6 +19,7 @@
     "mongoose": "^5.3.9",
     "mongoose-query-random": "^1.0.1",
     "mongoose-sex-page": "^1.2.4",
-    "super-pagination": "^0.5.12"
+    "super-pagination": "^0.5.12",
+    "svg-captcha": "^1.4.0"
   }
 }

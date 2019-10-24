@@ -1,6 +1,6 @@
 window.onload = function () {
     //头像
-    $('#avatar').on('change', function () {
+    $('#editBox').on('change','#avatar', function () {
         var formDate = new FormData();
         formDate.append('avatar', this.files[0]);
         $.ajax({
@@ -29,12 +29,14 @@ window.onload = function () {
                 location.reload();
             },
             error: function (err) {
+                console.log(err);
+                
                 $('#errMsg').css({
                     'display': 'block'
                 }).html('<strong>错误！</strong>' + JSON.parse(err.responseText).message)
             }
         })
-        
+
         return false
     })
     // 渲染用户列表
@@ -62,6 +64,7 @@ window.onload = function () {
         })
 
     })
+    //提交修改按钮
     $('#editBox').on('submit', '#changeUserForm', function () {
         var formData = $(this).serialize();
         console.log(formData);
@@ -74,6 +77,85 @@ window.onload = function () {
                 location.reload();
             }
         })
+        return false
+    })
+    // 全选按钮
+    $('#checkAll').on('click', function () {
+        $('.singleCheck').prop('checked', this.checked);
+        this.checked ? $('.btn-sm').css({
+            'display': 'inline-block'
+        }) : $('.btn-sm').css({
+            'display': 'none'
+        })
+    })
+    // 批量删除按钮
+    $('#userTable').on('click', '.singleCheck', function () {
+        // 单选影响全选
+        $('.singleCheck').each(function (index, item) {
+            if (!item.checked) {
+                $('#checkAll').prop('checked', false)
+                return false
+            } else {
+                $('#checkAll').prop('checked', true)
+            }
+
+        })
+
+
+        //按钮显示
+        $('.singleCheck').each(function (index, item) {
+            if (item.checked) {
+
+                $('.btn-sm').css({
+                    'display': 'inline-block'
+                })
+                return false
+            } else {
+                $('.btn-sm').css({
+                    'display': 'none'
+                })
+            }
+
+        })
+    })
+    //批量删除
+    $('.btn-sm').on('click', function () {
+        var ids = new String();
+        $('.singleCheck').each(function (index, item) {
+            $(item).prop('checked') ? ids += '-' + $(item).parents('tr').attr('data-id') : ids;
+        })
+        var a = ids.substr(1);
+        $.ajax({
+            url: '/users/' + a,
+            type: 'delete',
+            success: function (res) {
+                console.log(res);
+                location.reload();
+            },
+            error: function (err) {
+                console.log(err);
+                location.reload();
+            }
+        })
+        return false
+    })
+    //单个删除
+    $('#userBox').on('click', '#delBtn', function () {
+        var id = $(this).parents('tr').attr('data-id');
+        if (confirm('确定要删除' + $(this).attr('data-email') + '用户吗？')) {
+            $.ajax({
+                url: '/users/' + id,
+                type: 'delete',
+                success: function (res) {
+                    console.log(res);
+                    location.reload();
+                },
+                error: function (err) {
+                    console.log(err);
+                    location.reload();
+                }
+            })
+        }
         return false
     })
 

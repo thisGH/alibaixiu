@@ -16,7 +16,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
   secret: 'keyboard cat',
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: true
 }));
 // 处理post参数
 app.use(formidableMiddleware({

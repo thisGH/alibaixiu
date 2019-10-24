@@ -1,7 +1,9 @@
 // 数据库操作
 const mongoose = require('mongoose');
 // 模型规则类
-const { Schema } = mongoose;
+const {
+	Schema
+} = mongoose;
 // 对象规则验证
 const Joi = require('joi');
 // hash密码
@@ -51,7 +53,9 @@ const UserSchema = new Schema({
 		required: true,
 		default: 1
 	}
-}, {versionKey: false});
+}, {
+	versionKey: false
+});
 
 // 用户集合类
 const User = mongoose.model('User', UserSchema);
@@ -85,11 +89,15 @@ const validateLogin = user => {
 	// 验证
 	return Joi.validate(user, schema, {
 		// 检测到错误立即返回
-		abortEarly: true
+		abortEarly: true,
+		// 允许对象包含被忽略的未知键
+		allowUnknown: true
 	});
 }
 
-User.findOne({'email': 'itheima@itcast.cn'}).then(async result => {
+User.findOne({
+	'email': 'itheima@itcast.cn'
+}).then(async result => {
 	if (result == null) {
 		// 生成盐
 		const salt = await bcrypt.genSalt(10);
@@ -108,9 +116,30 @@ User.findOne({'email': 'itheima@itcast.cn'}).then(async result => {
 	}
 })
 
+//生成验证码
+
+const svgCaptcha = require('svg-captcha');
+
+const getCode = (req, res) => {
+	var codeConfig = {
+		size: 4, // 验证码长度
+		ignoreChars: '0o1i', // 验证码字符中排除 0o1i
+		noise: 1, // 干扰线条的数量
+		height: 44
+	}
+	var captcha = svgCaptcha.create(codeConfig);
+	req.session.captcha = captcha.text.toLowerCase(); //存session用于验证接口获取文字码
+	var codeData = {
+		img: captcha.data
+	}
+	return codeData;
+}
+
+
 // 导出对象
 module.exports = {
 	User,
 	validateUser,
-	validateLogin
+	validateLogin,
+	getCode
 };
